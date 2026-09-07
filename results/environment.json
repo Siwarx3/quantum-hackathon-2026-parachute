@@ -1,0 +1,7 @@
+{
+  "quantum-metal": "0.8.1",
+  "numpy": "1.26.4",
+  "pandas": "3.0.5",
+  "matplotlib": "3.11.1",
+  "shapely": "2.1.2"
+}

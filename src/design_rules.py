@@ -59,7 +59,9 @@ class DesignRules:
     chip_height_mm: float = CHIP_HEIGHT_MM
 
     edge_keepout_mm: float = EDGE_KEEPOUT_MM
-    min_qubit_spacing_mm: float = 1.00  # Screening center-to-center proxy
+    screening_center_spacing_mm: float = 1.00  # Screening center-to-center proxy
+    min_qubit_spacing_mm: float = 1.00  # Backwards-compatible alias for screening center spacing
+    min_qubit_gap_mm: float = MIN_QUBIT_GAP_MM  # Physical edge-to-edge pocket gap DRC rule (0.30 mm)
 
     cpw_width_um: float = 10.0
     min_cpw_width_um: float = MIN_CPW_WIDTH_UM

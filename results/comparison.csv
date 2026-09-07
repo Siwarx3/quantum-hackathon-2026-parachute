@@ -1,0 +1,4 @@
+topology,workload,meander_density,n_edges,max_degree,total_route_length_mm,longest_route_mm,crossings,drc_violations,drc_notes,crosstalk_proxy,workload_mismatch,min_est_qw_freq_ghz,avg_est_qw_freq_ghz,input_pitch_mm,norm_total_route_length_mm,norm_longest_route_mm,norm_crossings,norm_drc_violations,norm_crosstalk_proxy,norm_workload_mismatch,cost
+ring,GHZ,0,5,2,5.500000000000001,1.1000000000000003,0,0,PASS,0.0,0.5,27.815854198286235,27.81585419828624,1.1,0.06984126984126988,7.578314161263864e-17,0.0,0.0,0.0,0.3333333333333333,0.030634920634920654
+linear,GHZ,0,4,2,4.4,1.1,0,0,PASS,0.0,1.5,27.81585419828624,27.81585419828624,1.1,0.0,0.0,0.0,0.0,0.0,1.0,0.05
+star,GHZ,0,4,4,4.4,1.1,0,0,PASS,1.0,0.0,27.81585419828624,27.81585419828624,1.1,0.0,0.0,0.0,0.0,0.625,0.0,0.09375

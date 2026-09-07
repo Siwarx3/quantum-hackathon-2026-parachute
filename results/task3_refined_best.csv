@@ -1,0 +1,3 @@
+total_route_length_mm,longest_route_mm,crossings,min_route_clearance_mm,drc_violations,drc_notes,topology,layout_parameter_mm,is_feasible,optimization_cost_mm
+1.2093749999999996,0.30234374999999997,0,0.828,0,PASS,linear,1.15234375,True,1.2093749999999996
+3.096637061435917,0.7741592653589793,0,0.368,0,PASS,star,1.328125,True,3.096637061435917
