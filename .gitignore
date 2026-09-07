@@ -1,0 +1,23 @@
+# Virtual environment
+.venv/
+venv/
+ENV/
+env/
+
+# Python byte-code / cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+
+# Jupyter / checkpoints
+.ipynb_checkpoints/
+
+# OS metadata
+.DS_Store
+Thumbs.db
