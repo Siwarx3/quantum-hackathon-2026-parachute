@@ -1,10 +1,27 @@
 """Task 1: self-defined Design Rule Check (DRC) for the baseline chip design."""
 from qiskit_metal.qlibrary.qubits.transmon_pocket import TransmonPocket
 
+try:
+    from .design_rules import (
+        MIN_QUBIT_GAP_MM,
+        MIN_CPW_WIDTH_MM,
+        MIN_CPW_GAP_MM,
+        EDGE_KEEPOUT_MM,
+    )
+except ImportError:
+    from design_rules import (
+        MIN_QUBIT_GAP_MM,
+        MIN_CPW_WIDTH_MM,
+        MIN_CPW_GAP_MM,
+        EDGE_KEEPOUT_MM,
+    )
+
+
 def get_qubit_components(design):
     """Return {name: component} for every TransmonPocket in the design."""
     return {name: comp for name, comp in design.components.items()
             if isinstance(comp, TransmonPocket)}
+
 
 def edge_to_edge_gap(bounds_a, bounds_b):
     """Gap between two axis-aligned bounding boxes. Negative means overlap."""
@@ -19,7 +36,8 @@ def edge_to_edge_gap(bounds_a, bounds_b):
         return -min(overlap_x, overlap_y)
     return (dx**2 + dy**2) ** 0.5
 
-def check_qubit_spacing(design, min_gap_mm=0.3):
+
+def check_qubit_spacing(design, min_gap_mm=MIN_QUBIT_GAP_MM):
     """Rule 1: no two qubit pockets may sit closer than min_gap_mm apart, edge to edge."""
     qubits = get_qubit_components(design)
     names = list(qubits.keys())
@@ -34,10 +52,11 @@ def check_qubit_spacing(design, min_gap_mm=0.3):
                 violations.append((n1, n2, round(gap, 3)))
     return violations
 
-def check_trace_geometry(design, min_width_mm=0.005, min_gap_mm=0.003):
-    """Rule 2: CPW trace width/gap must meet a foundry-style minimum feature size."""
+
+def check_trace_geometry(design, min_width_mm=MIN_CPW_WIDTH_MM, min_gap_mm=MIN_CPW_GAP_MM):
+    """Rule 2: CPW trace width/gap must meet our self-defined comparative minimum feature size."""
     def to_mm(val_str):
-        val_str = val_str.strip()
+        val_str = str(val_str).strip()
         if val_str.endswith('um'):
             return float(val_str[:-2]) / 1000
         if val_str.endswith('mm'):
@@ -47,13 +66,14 @@ def check_trace_geometry(design, min_width_mm=0.005, min_gap_mm=0.003):
     width_mm = to_mm(design.variables.get('cpw_width', '10um'))
     gap_mm = to_mm(design.variables.get('cpw_gap', '6um'))
     violations = []
-    if width_mm < min_width_mm:
+    if width_mm < min_width_mm - 1e-9:
         violations.append(('cpw_width', width_mm, min_width_mm))
-    if gap_mm < min_gap_mm:
+    if gap_mm < min_gap_mm - 1e-9:
         violations.append(('cpw_gap', gap_mm, min_gap_mm))
     return violations
 
-def check_keepout(design, margin_mm=0.5):
+
+def check_keepout(design, margin_mm=EDGE_KEEPOUT_MM):
     """Rule 3: no component may sit within margin_mm of the chip edge."""
     size_x = float(design.chips.main.size.size_x.replace('mm', ''))
     size_y = float(design.chips.main.size.size_y.replace('mm', ''))
@@ -71,7 +91,9 @@ def check_keepout(design, margin_mm=0.5):
             violations.append(name)
     return violations
 
-def run_all_checks(design, min_qubit_gap_mm=0.3, keepout_margin_mm=0.5):
+
+def run_all_checks(design, min_qubit_gap_mm=MIN_QUBIT_GAP_MM, keepout_margin_mm=EDGE_KEEPOUT_MM):
+    """Run all baseline DRC checks on the design and print a clear report."""
     print("=== DRC Report ===")
     spacing_violations = check_qubit_spacing(design, min_qubit_gap_mm)
     if spacing_violations:
@@ -87,7 +109,7 @@ def run_all_checks(design, min_qubit_gap_mm=0.3, keepout_margin_mm=0.5):
         for name, val, minimum in trace_violations:
             print(f"    {name} = {val}mm < required {minimum}mm")
     else:
-        print("[PASS] CPW trace width/gap meet minimum feature size")
+        print(f"[PASS] CPW trace width/gap meet minimum feature size (w>={MIN_CPW_WIDTH_MM*1e3:.0f}um, g>={MIN_CPW_GAP_MM*1e3:.0f}um)")
 
     keepout_violations = check_keepout(design, keepout_margin_mm)
     if keepout_violations:
@@ -95,12 +117,20 @@ def run_all_checks(design, min_qubit_gap_mm=0.3, keepout_margin_mm=0.5):
     else:
         print(f"[PASS] All qubits respect {keepout_margin_mm}mm keep-out from chip edge")
 
+    all_pass = not (spacing_violations or trace_violations or keepout_violations)
+    return all_pass
+
+
 if __name__ == '__main__':
-    from chain_topology import build_chain
-    print(">>> Checking chain at pitch=2.5mm (our working baseline)")
-    design, _ = build_chain(pitch_mm=2.5)
+    try:
+        from .baseline_chip import build_baseline
+    except ImportError:
+        from baseline_chip import build_baseline
+
+    print(">>> TASK 1: checking baseline chip (pitch = 2.5 mm)")
+    design, _ = build_baseline()
     run_all_checks(design)
 
-    print("\n>>> Checking chain at pitch=0.5mm (deliberately too tight)")
-    design2, _ = build_chain(pitch_mm=0.5)
+    print("\n>>> TASK 1 verification: checking deliberately tight spacing (pitch = 0.5 mm)")
+    design2, _ = build_baseline(pitch_mm=0.5)
     run_all_checks(design2)
