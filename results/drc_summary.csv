@@ -1,0 +1,13 @@
+topology,rule,threshold,measured_value,status,notes
+linear,Total DRC violations,must equal 0,0,PASS,PASS
+linear,Route crossings,must equal 0 for no crossing airbridges,0,PASS,No crossing airbridges required
+linear,Minimum CPW envelope route clearance,>= 0.15 mm,0.828,PASS,Geometry-based crosstalk/manufacturability proxy
+linear,Minimum qubit pocket gap,>= 0.3 mm,checked by metal_analysis.py,PASS,Pocket spacing violations are included in drc_notes if present
+linear,CPW trace width/gap,>= 8/4 um,nominal 10/6 um,PASS,Actual route options are checked in metal_analysis.py
+linear,Chip-edge keepout,>= 0.5 mm,checked on built geometry,PASS,All component geometry must remain inside allowed chip region
+star,Total DRC violations,must equal 0,0,PASS,PASS
+star,Route crossings,must equal 0 for no crossing airbridges,0,PASS,No crossing airbridges required
+star,Minimum CPW envelope route clearance,>= 0.15 mm,0.368,PASS,Geometry-based crosstalk/manufacturability proxy
+star,Minimum qubit pocket gap,>= 0.3 mm,checked by metal_analysis.py,PASS,Pocket spacing violations are included in drc_notes if present
+star,CPW trace width/gap,>= 8/4 um,nominal 10/6 um,PASS,Actual route options are checked in metal_analysis.py
+star,Chip-edge keepout,>= 0.5 mm,checked on built geometry,PASS,All component geometry must remain inside allowed chip region

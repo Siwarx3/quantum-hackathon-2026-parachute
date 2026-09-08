@@ -11,6 +11,9 @@ import matplotlib.pyplot as plt
 from src.chain_topology import build_chain
 from src.star_topology import build_star
 from src.metal_analysis import analyze, render
+from src.em_routing_analysis import build_em_routing_summary
+from src.drc_summary import build_drc_summary
+from src.task6_synthesis import build_task6_synthesis, write_task6_recommendation
 
 ROOT = Path(__file__).resolve().parent
 
@@ -51,18 +54,13 @@ def main():
             elif result["drc_violations"] > 0:
                 failure_type = "drc_violation"
 
-            sweep_variable = (
-                "chain_neighbor_pitch_mm"
-                if topology == "linear"
-                else "star_hub_to_leaf_radius_mm"
-            )
-
             rows.append(
                 dict(
                     topology=topology,
                     pitch_mm=pitch,  # kept for report compatibility
                     layout_parameter_mm=pitch,
-                    sweep_variable=sweep_variable,
+                    sweep_variable=sweep_var,
+                    failure_type=failure_type,
                     **result,
                 )
             )
@@ -87,6 +85,27 @@ def main():
 
     df.to_csv(ROOT / "results/metal_sweep.csv", index=False)
 
+    failed = df[df["drc_violations"] > 0].copy()
+    failed["resolution"] = failed.apply(
+        lambda r: (
+            "decrease spacing to stay within 0.50 mm edge keepout"
+            if "edge keepout" in str(r.get("drc_notes", ""))
+            else "increase spacing/radius until pocket-gap and routing constraints pass"
+        ),
+        axis=1,
+    )
+    failed[
+        [
+            "topology",
+            "layout_parameter_mm",
+            "sweep_variable",
+            "failure_type",
+            "drc_violations",
+            "drc_notes",
+            "resolution",
+        ]
+    ].to_csv(ROOT / "results/drc_iteration_failures.csv", index=False)
+
     feasible = df[df["is_feasible"]]
 
     best = (
@@ -97,6 +116,13 @@ def main():
     )
 
     best.to_csv(ROOT / "results/metal_comparison.csv", index=False)
+    em_summary = build_em_routing_summary(best)
+    em_summary.to_csv(ROOT / "results/em_routing_summary.csv", index=False)
+    drc_summary = build_drc_summary(best)
+    drc_summary.to_csv(ROOT / "results/drc_summary.csv", index=False)
+    task6 = build_task6_synthesis(best, em_summary)
+    task6.to_csv(ROOT / "results/task6_synthesis.csv", index=False)
+    write_task6_recommendation(ROOT, task6)
 
     for row in best.itertuples():
         design = designs[row.topology, row.layout_parameter_mm]
@@ -164,6 +190,39 @@ def main():
     write_report(ROOT, df, best)
     print("\n=== Best Feasible Candidates Selected ===")
     print(best[['topology', 'layout_parameter_mm', 'total_route_length_mm', 'longest_route_mm', 'optimization_cost_mm', 'drc_violations']].to_string(index=False))
+    print("\n=== Task 4 EM-Aware Routing Summary ===")
+    print(
+        em_summary[
+            [
+                "topology",
+                "crossings",
+                "crossing_airbridges_needed",
+                "min_route_clearance_mm",
+                "route_clearance_status",
+                "crosstalk_risk_proxy",
+            ]
+        ].to_string(index=False)
+    )
+    print("\n=== Task 5 DRC / Manufacturability Summary ===")
+    print(
+        drc_summary[
+            ["topology", "rule", "threshold", "measured_value", "status"]
+        ].to_string(index=False)
+    )
+    print("\n=== Task 6 Comparative Synthesis ===")
+    print(
+        task6[
+            [
+                "topology",
+                "total_route_length_mm",
+                "longest_route_or_weakest_path_proxy_mm",
+                "crossings",
+                "airbridges_needed",
+                "workload_fit",
+                "fabrication_recommendation_role",
+            ]
+        ].to_string(index=False)
+    )
 
     if set(best.topology) != {'linear', 'star'}:
         raise SystemExit(

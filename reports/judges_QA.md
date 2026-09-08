@@ -37,11 +37,36 @@ readout and control structures, setting junction and resonator targets, extracti
 coupling/loss with EM tools, checking the actual process PDK and reviewing packaging.
 
 **What would you fabricate first?**
-Develop the chain for a nearest-neighbor demonstrator, subject to those checks.
-Use the star if central-control interactions are the main requirement. Refer to
-metal_comparison.csv for the actual length trade-off; do not substitute proxy scores.
+Recommend the Linear Chain as the first fabrication-development candidate under our route-length,
+clearance, and DRC metrics (shortest 1.400 mm routing, largest 0.828 mm clearance, 0 crossings).
+The Star topology remains preferred for experiments dominated by fixed hub-to-leaf interactions,
+accepting central hub capacitive density and gate serialization. Refer to `results/task6_synthesis.csv`
+and `reports/task6_recommendation.md` for the complete side-by-side synthesis.
 
-**Where is the evidence?**
-The four-page report explains the method. metal_sweep.csv records all 14 trials,
-metal_comparison.csv identifies feasible selections, figures/metal_*.png shows
-built geometry and the sweep, and designs/*.py reconstructs the selected designs.
+**How did you evaluate EM routing, crossings, and airbridges (Task 4)?**
+Both topologies achieve 0 crossings and require 0 crossing airbridges, enabling single-layer
+planar lithography. We assess geometric clearance by buffering the physical CPW envelope
+(10 um center conductor + 6 um ground etch = 22 um outer envelope) rather than 1D mathematical
+centerlines. Linear achieves 0.828 mm clearance (low crosstalk risk proxy); Star achieves 0.368 mm
+clearance (both pass the >= 0.15 mm DRC rule). For microwave scale comparison, an illustrative
+6 GHz quarter-wave resonator on silicon (eps_eff=6.0) requires ~5.10 mm (half-wave ~10.20 mm);
+our couplers are short direct interconnects (0.350 mm and 0.839 mm) rather than meandering resonators.
+See `results/em_routing_summary.csv`.
+
+**What failures occurred during layout iteration and how were they resolved (Task 5)?**
+Real hardware design is iterative. Across the 14-point sweep, 4 candidates failed:
+1. Linear at 0.9 mm: Pocket-to-pocket gap was 0.00 mm (colliding pockets < 0.3 mm threshold). Resolved by shifting pitch to >= 1.2 mm.
+2. Star at 0.9 mm: Pocket-to-pocket gap was -0.10 mm (severe overlapping leaf pockets). Resolved by increasing radius to >= 1.5 mm.
+3. Star at 1.2 mm: Pocket-to-pocket gap was 0.17 mm (< 0.3 mm threshold). Resolved by increasing radius to >= 1.5 mm.
+4. Linear at 2.8 mm: Outer qubit pocket reached within 0.10 mm of the chip edge (< 0.5 mm keep-out). Resolved by constraining sweep within the feasible 1.2-2.5 mm envelope.
+All 6 final design rules pass with zero violations for the selected designs. See `results/drc_summary.csv` and `results/drc_iteration_failures.csv`.
+
+**Where is the complete evidence?**
+The full evidence is captured across Tasks 1 to 6 in:
+- `results/metal_sweep.csv` & `results/metal_comparison.csv` (Task 3 physical optimization)
+- `results/em_routing_summary.csv` (Task 4 EM-aware routing & clearance)
+- `results/drc_summary.csv` & `results/drc_iteration_failures.csv` (Task 5 manufacturability & iteration history)
+- `results/task6_synthesis.csv` & `reports/task6_recommendation.md` (Task 6 comparative synthesis)
+- `reports/technical_report.pdf` (formal 4-page submission report)
+- `figures/metal_linear.png`, `figures/metal_star.png`, `figures/metal_sweep.png` (high-res geometry renders)
+

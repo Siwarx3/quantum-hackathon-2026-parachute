@@ -83,30 +83,46 @@ We swept the layout parameter across 7 candidate spacings ($0.9\text{ to }2.8\te
 ├── run_all.py                     # Primary runner: builds Metal chips, runs DRC & exports artifacts
 ├── run_proxy.py                   # Fast screening exploration (chain, star, ring)
 ├── src/
-│   ├── chain_topology.py          # Qiskit Metal 5-qubit linear chain builder
-│   ├── star_topology.py           # Qiskit Metal 5-qubit star hub builder
-│   ├── metal_analysis.py          # Route measurement, Shapely geometry analysis, DRC & plotting
-│   ├── drc_check.py               # Pocket bounding-box and geometric validation routines
-│   ├── design_rules.py            # Baseline design rule parameters
-│   ├── submission_report.py       # Technical report generation (PDF and Markdown)
-│   ├── topologies.py              # Screening topology graph definitions and coordinate mappings
-│   ├── geometry_metrics.py        # Proxy geometry estimators
+│   ├── baseline_chip.py           # Task 1: Standardized 12x10mm substrate & baseline geometry
+│   ├── design_rules.py            # Task 1: Centralized 8-rule physical DRC thresholds
+│   ├── chain_topology.py          # Task 2: Qiskit Metal 5-qubit linear chain builder
+│   ├── star_topology.py           # Task 2: Qiskit Metal 5-qubit star hub builder
+│   ├── metal_analysis.py          # Tasks 2 & 5: Shapely geometry analysis, clearance & DRC checks
+│   ├── drc_check.py               # Task 1: Bounding-box and gap evaluation utilities
+│   ├── em_routing_analysis.py     # Task 4: Crossings, airbridges, envelope clearance & lambda/4 analysis
+│   ├── drc_summary.py             # Task 5: 6-rule pass/fail evaluation matrix
+│   ├── task6_synthesis.py         # Task 6: Comparative synthesis table & balanced recommendation
+│   ├── submission_report.py       # Formal 4-page report generator (PDF & Markdown)
+│   ├── topologies.py              # Graph topology algorithms (degree, diameter, shortest paths)
+│   ├── geometry_metrics.py        # Segment distance and crossing geometry helpers
 │   ├── optimizer.py               # Screening parameter sweep and ranking
-│   └── plotting.py                # Screening visualization routines
+│   └── plotting.py                # Visual layout rendering and sweep curve plotting
+├── scripts/
+│   └── task3_refined_optimizer.py # Continuous binary-search boundary optimizer
 ├── designs/
 │   ├── linear.py                  # Standalone reconstruction script for optimal linear chain
 │   └── star.py                    # Standalone reconstruction script for optimal star hub
 ├── figures/                       # Rendered layouts, parameter sweep plots, and heatmaps
+│   ├── metal_linear.png           # Render of optimal linear chain (1.2 mm pitch)
+│   ├── metal_star.png             # Render of optimal star hub (1.5 mm radius)
+│   └── metal_sweep.png            # 7-point parameter sweep and DRC feasibility curves
 ├── reports/
 │   ├── technical_report.pdf       # 4-page submission technical report
 │   ├── technical_report.md        # Technical report markdown source
+│   ├── task6_recommendation.md    # Task 6: Synthesis and balanced recommendation report
 │   └── judges_QA.md               # Detailed technical Q&A for competition defense
 ├── results/
-│   ├── metal_comparison.csv       # Measured physical results for optimal designs
-│   ├── metal_sweep.csv            # Detailed records for all tested parameter sweep points
+│   ├── metal_sweep.csv            # Task 3: 7-point sweep for both topologies with DRC & cost
+│   ├── metal_comparison.csv       # Task 3: Head-to-head comparison of optimal candidates
+│   ├── task3_refined_best.csv     # Task 3: Continuous refined optimizer results
+│   ├── em_routing_summary.csv     # Task 4: EM-aware routing metrics & lambda/4 analysis
+│   ├── drc_summary.csv            # Task 5: Comprehensive 6-rule DRC pass/fail status
+│   ├── drc_iteration_failures.csv # Task 5: Documented failure modes and engineering resolutions
+│   ├── task6_synthesis.csv        # Task 6: Final synthesis across physical, EM & graph metrics
 │   └── environment.json           # Execution runtime and package environment stamp
 └── tests/
-    └── test_integration.py       # Automated regression test suite
+    ├── test_integration.py       # Automated regression tests (optimizer, DRC, crossings)
+    └── test_task6.py             # Dedicated Task 6 synthesis & graph metric tests
 ```
 
 ---
@@ -180,3 +196,4 @@ Hardware design is inherently an iterative process. Our key design iterations in
 
 * **Siwar Diab**
 * **Lubna Ibrahim**
+* **Ahmed Ashraf**

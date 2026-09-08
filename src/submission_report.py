@@ -24,7 +24,9 @@ def write_report(root, sweep, best):
          'The separate run_proxy.py offers a fast three-topology screening study; its ring and meander '
          'results are estimates and are excluded from this physical comparison.'),
         ('2. Optimization and measured comparison',
-         'Objective: minimize total built CPW route length and longest individual route subject to zero DRC violations. '
+         'Objective: minimize total built CPW route length subject to zero DRC violations. '
+         'The longest individual route is reported separately as a coherence-relevant geometry proxy, '
+         'but it is not included in the selection cost. '
          'Invalid candidates cannot win through a soft penalty. We sweep across both coarse and fine boundary grids '
          '(0.9–2.8 mm) for each topology. The chain variable is neighbor pitch; the star variable is hub-to-leaf radius. '
          'All candidates use the same die, transmon dimensions and CPW rules.\n\n'

@@ -10,7 +10,7 @@ Reproduce with python run_all.py. CSV files retain every sweep point and violati
 
 # 2. Optimization and measured comparison
 
-Objective: minimize total built CPW route length and longest individual route subject to zero DRC violations. Invalid candidates cannot win through a soft penalty. We sweep across both coarse and fine boundary grids (0.9–2.8 mm) for each topology. The chain variable is neighbor pitch; the star variable is hub-to-leaf radius. All candidates use the same die, transmon dimensions and CPW rules.
+Objective: minimize total built CPW route length subject to zero DRC violations. The longest individual route is reported separately as a coherence-relevant geometry proxy, but it is not included in the selection cost. Invalid candidates cannot win through a soft penalty. We sweep across both coarse and fine boundary grids (0.9–2.8 mm) for each topology. The chain variable is neighbor pitch; the star variable is hub-to-leaf radius. All candidates use the same die, transmon dimensions and CPW rules.
 
 linear: optimal parameter 1.20 mm; total 1.400 mm; longest 0.350 mm; opt. cost 1.400; crossings 0; DRC 0.
 star: optimal parameter 1.50 mm; total 3.356 mm; longest 0.839 mm; opt. cost 3.356; crossings 0; DRC 0.
