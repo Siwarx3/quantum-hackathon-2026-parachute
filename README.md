@@ -198,3 +198,4 @@ Hardware design is inherently an iterative process. Our key design iterations in
 * **Siwar Diab**
 * **Lubna Ibrahim**
 * **Ahmed Ashraf**
+* **Mentor:** Julián Stiefkens
