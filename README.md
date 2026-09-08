@@ -8,6 +8,18 @@ We systematically sweep physical qubit placement, construct and measure actual C
 
 ---
 
+## 🎯 Submission Deliverables & Presentation
+
+| Deliverable | Format | Link / Access | Description |
+| :--- | :---: | :---: | :--- |
+| **Presentation Slide Deck** | PDF / ODP | [**parachute13.pdf**](parachute13.pdf) &bull; [parachute13.odp](parachute13.odp) | Official team presentation slides (AQH26 Parachute 🪂 Team) |
+| **Technical Report (4-Page)** | PDF / MD | [**reports/technical_report.pdf**](reports/technical_report.pdf) &bull; [Source](reports/technical_report.md) | Comprehensive engineering report with methodology & data |
+| **Judges Q&A Defense Guide** | Markdown | [**reports/judges_QA.md**](reports/judges_QA.md) | In-depth technical questions & answers for competition defense |
+| **Design Synthesis & Recommendation** | Markdown | [**reports/task6_recommendation.md**](reports/task6_recommendation.md) | Final architecture decision, trade-offs & synthesis |
+| **DRC Verification Matrix** | CSV | [**results/drc_summary.csv**](results/drc_summary.csv) | Automated 6-rule physical design rule verification |
+
+---
+
 ## Final Layout Candidates
 
 | Linear Chain (Pitch = 1.2 mm) | Star Topology (Radius = 1.5 mm) |
@@ -80,6 +92,8 @@ We swept the layout parameter across 7 candidate spacings ($0.9\text{ to }2.8\te
 ```
 .
 ├── README.md                      # Engineering overview, results, and reproduction guide
+├── parachute13.pdf                # Team presentation slide deck (PDF format)
+├── parachute13.odp                # Editable presentation slides (OpenDocument Presentation)
 ├── requirements.txt               # Pinned Python package dependencies
 ├── run_all.py                     # Primary runner: builds Metal chips, runs DRC & exports artifacts
 ├── run_proxy.py                   # Fast screening exploration (chain, star, ring)
