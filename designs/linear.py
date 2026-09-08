@@ -1,7 +1,7 @@
 
-from qiskit_metal.qlibrary.tlines.pathfinder import RoutePathfinder
-
 from qiskit_metal.qlibrary.qubits.transmon_pocket import TransmonPocket
+
+from qiskit_metal.qlibrary.tlines.pathfinder import RoutePathfinder
 
 import qiskit_metal
 from qiskit_metal import designs
