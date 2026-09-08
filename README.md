@@ -1,6 +1,7 @@
 # Optimizing a 5-Qubit Superconducting Quantum Chip (Qiskit Metal)
 **Alexandria Quantum Hackathon 2026 (AQH26) Parachute 🪂 Team — Track 4: Quantum Hardware Design Workflow**
 
+
 We compare **linear chain (1D nearest-neighbor)** and **star (central hub)** topologies for a 5-qubit superconducting transmon processor designed in **Qiskit Metal**. Both candidate architectures are designed and geometrically analyzed on a standardized **12 mm × 10 mm** high-resistivity silicon substrate. 
 
 We systematically sweep physical qubit placement, construct and measure actual Coplanar Waveguide (CPW) routes, enforce automated geometric Design Rule Checks (DRC), and benchmark the optimized candidates against algorithmic quantum workloads (5-qubit GHZ state preparation and 1D Trotterized nearest-neighbor circuits).
